@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Strava Activities</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Strava Activities</h1>
+  <% if (activities.length === 0) { %>
+    <p>No activities found.</p>
+  <% } else { %>
+    <ul>
+      <% activities.forEach(activity => { %>
+        <li>
+          <%= activity.name %>: <%= activity.distance %> meters
+          <form action="/edit_activity" method="POST" style="display:inline;">
+            <input type="hidden" name="access_token" value="<%= accessToken %>">
+            <input type="hidden" name="activityId" value="<%= activity.id %>">
+            <input type="text" name="name" placeholder="New Name" required>
+            <textarea name="description" placeholder="New Description"></textarea>
+            <button type="submit">Edit</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <h2>Create a New Activity</h2>
+  <form action="/create_activity" method="POST">
+    <input type="hidden" name="access_token" value="<%= accessToken %>">
+    <div>
+      <label for="name">Activity Name:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+      <label for="type">Activity Type:</label>
+      <select id="type" name="type" required>
+        <option value="Run">Run</option>
+        <option value="Ride">Ride</option>
+        <option value="Swim">Swim</option>
+      </select>
+    </div>
+    <div>
+      <label for="start_date_local">Start Date (YYYY-MM-DDTHH:MM:SSZ):</label>
+      <input type="datetime-local" id="start_date_local" name="start_date_local" required>
+    </div>
+    <div>
+      <label for="elapsed_time">Elapsed Time (in seconds):</label>
+      <input type="number" id="elapsed_time" name="elapsed_time" required>
+    </div>
+    <div>
+      <label for="description">Description:</label>
+      <textarea id="description" name="description"></textarea>
+    </div>
+    <button type="submit">Create Activity</button>
+  </form>
+</body>
+</html>
